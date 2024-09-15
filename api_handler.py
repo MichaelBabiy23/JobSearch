@@ -6,7 +6,7 @@ from tkinter import messagebox
 # API endpoint and default headers
 url = "https://jsearch.p.rapidapi.com/search"
 headers = {
-    "X-RapidAPI-Key": "YOUR_RAPIDAPI_KEY",  # Replace with your RapidAPI key
+    "X-RapidAPI-Key": "aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12",  # Replace with your RapidAPI key
     "X-RapidAPI-Host": "jsearch.p.rapidapi.com"
 }
 
