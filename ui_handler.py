@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from api_handler import save_to_json, send_request, load_from_json
 from email_handler import send_email, add_email_to_file, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
@@ -21,7 +22,7 @@ def create_ui():
     query_entry = tk.Entry(root, width=50)
     query_entry.grid(row=1, column=1, padx=10, pady=5)
     query_entry.insert(0, data.get("query", ""))  # Load the existing value
-    tk.Label(root, text="Node.js developer in New-York,USA").grid(row=1, column=2, padx=10, pady=5, sticky="w")
+    tk.Label(root, text="Example: Node.js developer in New-York,USA").grid(row=1, column=2, padx=10, pady=5, sticky="w")
     tk.Label(root, text="Free-form jobs search query. Include job title and location.").grid(row=2, column=1, padx=10,
                                                                                              pady=5, sticky="w")
 
@@ -39,7 +40,7 @@ def create_ui():
     num_pages_entry = tk.Entry(root, width=50)
     num_pages_entry.grid(row=5, column=1, padx=10, pady=5)
     num_pages_entry.insert(0, data.get("num_pages", "1"))  # Default value is 1
-    tk.Label(root, text="Number of pages to return, starting from page.").grid(row=6, column=1, padx=10, pady=5,
+    tk.Label(root, text="Number of pages to return, starting from page 1").grid(row=6, column=1, padx=10, pady=5,
                                                                                sticky="w")
     tk.Label(root, text="Default: 1, Allowed values: 1-20").grid(row=6, column=2, padx=10, pady=5, sticky="w")
 
@@ -55,11 +56,14 @@ def create_ui():
 
     # Remote Jobs Only
     tk.Label(root, text="Remote Jobs Only (optional)").grid(row=9, column=0, padx=10, pady=5, sticky="w")
-    remote_jobs_entry = tk.Entry(root, width=50)
-    remote_jobs_entry.grid(row=9, column=1, padx=10, pady=5)
-    remote_jobs_entry.insert(0, data.get("remote_jobs_only", "false"))  # Default value is false
+    remote_jobs_combobox = ttk.Combobox(root, values=["True", "False"], width=8, state="readonly")
+    remote_jobs_combobox.grid(row=9, column=1, padx=10, pady=5, sticky="w")
+    remote_jobs_combobox.set(data.get("remote_jobs_only", "False"))  # Default value is false
+    # remote_jobs_entry = tk.Entry(root, width=50)
+    # remote_jobs_entry.grid(row=9, column=1, padx=10, pady=5)
+    # remote_jobs_entry.insert(0, data.get("remote_jobs_only", "false"))  # Default value is false
     tk.Label(root, text="Find remote jobs only (work from home).").grid(row=10, column=1, padx=10, pady=5, sticky="w")
-    tk.Label(root, text="Default: false").grid(row=10, column=2, padx=10, pady=5, sticky="w")
+    tk.Label(root, text="Default: False").grid(row=10, column=2, padx=10, pady=5, sticky="w")
 
     # Employment Types
     tk.Label(root, text="Employment Types (optional)").grid(row=11, column=0, padx=10, pady=5, sticky="w")
@@ -75,7 +79,7 @@ def create_ui():
             "page": page_entry.get(),
             "num_pages": num_pages_entry.get(),
             "date_posted": date_posted_entry.get(),
-            "remote_jobs_only": remote_jobs_entry.get(),
+            "remote_jobs_only": remote_jobs_combobox.get(),
             "employment_types": employment_types_entry.get()
         }
         save_to_json(data)
