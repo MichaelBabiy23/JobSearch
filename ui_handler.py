@@ -79,7 +79,7 @@ def create_ui(
     ttk.Label(main_frame, text="Date Posted (optional)").grid(row=9, column=0, padx=10, pady=5, sticky="w")
     date_posted_combobox = ttk.Combobox(main_frame, values=["month", "week", "today", "3days"], width=10, state="readonly")
     date_posted_combobox.grid(row=9, column=1, padx=10, pady=5)
-    date_posted_combobox.set(data.get("date posted") or initial_date_posted)
+    date_posted_combobox.set(data.get("datePosted") or initial_date_posted)
 
     ttk.Label(main_frame, text="Allowed values: month, week, today, 3days").grid(row=10, column=1, padx=10, pady=5, sticky="w")
 
@@ -87,7 +87,7 @@ def create_ui(
     ttk.Label(main_frame, text="Remote Jobs Only (optional)").grid(row=11, column=0, padx=10, pady=5, sticky="w")
     remote_jobs_combobox = ttk.Combobox(main_frame, values=["True", "False"], width=10, state="readonly")
     remote_jobs_combobox.grid(row=11, column=1, padx=10, pady=5)
-    remote_jobs_combobox.set(data.get("remote only") or initial_remote_only)
+    remote_jobs_combobox.set(data.get("remoteOnly") or initial_remote_only)
 
     ttk.Label(main_frame, text="Find remote jobs only (work from home).").grid(row=12, column=1, padx=10, pady=5, sticky="w")
 
@@ -95,7 +95,7 @@ def create_ui(
     ttk.Label(main_frame, text="Allowed Job Providers (optional)").grid(row=13, column=0, padx=10, pady=5, sticky="w")
     allowed_job_providers_entry = ttk.Entry(main_frame, width=50)
     allowed_job_providers_entry.grid(row=13, column=1, padx=10, pady=5)
-    allowed_job_providers_entry.insert(0, data.get("allowed job providers") or initial_allowed_job_providers)
+    allowed_job_providers_entry.insert(0, data.get("allowedJobProviders") or initial_allowed_job_providers)
 
     ttk.Label(main_frame, text="Only receive job postings from specific job providers.").grid(row=14, column=1, padx=10, pady=5, sticky="w")
 
@@ -103,7 +103,7 @@ def create_ui(
     ttk.Label(main_frame, text="Employment Types (optional)").grid(row=15, column=0, padx=10, pady=5, sticky="w")
     employment_types_entry = ttk.Entry(main_frame, width=50)
     employment_types_entry.grid(row=15, column=1, padx=10, pady=5)
-    employment_types_entry.insert(0, data.get("employment types") or initial_employment_types)
+    employment_types_entry.insert(0, data.get("employmentTypes") or initial_employment_types)
 
     ttk.Label(main_frame, text="FULLTIME, CONTRACTOR, PARTTIME, INTERN").grid(row=16, column=1, padx=10, pady=5, sticky="w")
 
@@ -122,11 +122,11 @@ def create_ui(
             "location": location_entry.get(),
             "distance": distance_entry.get(),
             "language": language_entry.get(),
-            "date posted": date_posted_combobox.get(),
-            "allowed job providers": allowed_job_providers_entry.get(),
+            "datePosted": date_posted_combobox.get(),
+            "allowedJobProviders": allowed_job_providers_entry.get(),
             "index": index_entry.get(),
-            "remote only": remote_jobs_combobox.get(),
-            "employment types": employment_types_entry.get()
+            "remoteOnly": remote_jobs_combobox.get(),
+            "employmentTypes": employment_types_entry.get()
         }
         save_query_to_json(data)
 

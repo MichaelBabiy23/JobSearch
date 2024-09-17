@@ -2,8 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
-from create_msg import create_msg_html
-
+from create_msg import create_msg_mail
 
 # Function to send an email with the API data
 def send_email(recipient_emails):
@@ -21,7 +20,7 @@ def send_email(recipient_emails):
     # Convert API data (JSON) to a formatted string
 
     # HTML version
-    html_body = create_msg_html()
+    html_body = create_msg_mail()
     msg.attach(MIMEText(html_body, 'html'))
 
     try:
@@ -52,3 +51,9 @@ def add_email_to_file(new_email):
     with open('emails.txt', 'a') as f:
         f.write(new_email + '\n')
     print(f"Added {new_email} to emails.txt")
+
+def main():
+    send_email(load_emails_from_file())
+
+if __name__ == "__main__":
+    main()

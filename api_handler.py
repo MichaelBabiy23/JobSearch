@@ -61,9 +61,19 @@ def send_request():
     # Check the status of the request
     if response.status_code == 200:
         data = response.json()
+        for job in data['jobs']:
+            if job['location'] != "Israel":
+                job['location'] = job['location'].replace(", Israel", "").strip()
+
         # Print the API response in the console
-        print(data)
+        print(json.dumps(data, indent=4))
         save_data_to_json(data)
         messagebox.showinfo("Success", "API Request successful. Check console for response.")
     else:
         messagebox.showerror("Error", f"API Request failed: {response.status_code}")
+
+def main():
+    send_request()
+
+if __name__ == "__main__":
+    main()

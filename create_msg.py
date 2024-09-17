@@ -1,7 +1,8 @@
 import json
 from groq import Groq
 
-def create_msg_html():
+
+def create_msg_mail():
     with open('data.json', 'r') as f:
         api_data = json.load(f)
 
@@ -16,6 +17,9 @@ def create_msg_html():
             <th>Location</th>
             <th>Job Link</th>
             <th>Job Type</th>
+            <th>Description</th>
+            <th>Estimated Salary</th>
+            <th>Date Posted</th>
         </tr>
     """
 
@@ -33,6 +37,12 @@ def create_msg_html():
 def create_job_html(job):
     web = prioritised_websites(job)
 
+    # Call Groq API to generate a job description
+    description = generate_job_description(job)
+
+    # Hypothesize the salary range using Groq API
+    salary = generate_salary_hypothesis(job)
+
     job_html = f"""
     <tr>
         <td>{job['title']}</td>
@@ -40,6 +50,9 @@ def create_job_html(job):
         <td>{job['location']}</td>
         <td>{web}</td>
         <td>{job['employmentType']}</td>
+        <td>{description}</td>
+        <td>{salary}</td>
+        <td>{job['datePosted']}</td>
     </tr>
     """
 
@@ -70,8 +83,8 @@ def generate_groq_response(prompt):
         print(f"An error occurred: {e}")
         return "No response"
 
-# Create msg for mail
-def create_msg():
+# Create msg for telegram
+def create_msg_telegram():
     with open('data.json', 'r') as f:
         api_data = json.load(f)
 
@@ -92,13 +105,14 @@ def create_job_msg(job):
     # Hypothesize the salary range using Groq API
     salary = generate_salary_hypothesis(job)
 
-    job_msg = (f"Job name : {job['title']}\n"
-               f"Company name : {job['company']}\n"
+    job_msg = (f"Job Name : {job['title']}\n"
+               f"Company Name : {job['company']}\n"
                f"Location : {job['location']}\n"
-               f"Job link : {web}\n"
-               f"Job type : {job['employmentType']}\n"
-               f"Description : {description}\n"
+               f"Job Link : {web}\n"
+               f"Job Type : {job['employmentType']}\n"
+               f"{description}\n"
                f"Estimated Salary : {salary}\n"
+               f"Date Posted : {job['datePosted']}\n"
                "---------------------------------------------------------------------------------------------\n"
                )
 
@@ -131,10 +145,10 @@ def prioritised_websites(job):
 # Main function
 def main():
     # Call the create_msg function to generate job messages
-    job_messages = create_msg()
-
+    # job_messages = create_msg_mail()
     # Print the generated job messages
-    print(job_messages)
+    # print(job_messages)
+    print("hello")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 from api_handler import load_data_from_json
-from create_msg import create_msg
+from create_msg import create_msg_telegram
 import requests
 
 
@@ -17,7 +17,7 @@ def send_api_data_to_telegram(api_data):
     api_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
     # Extract the job messages
-    job_messages = create_msg().split(
+    job_messages = create_msg_telegram().split(
         '---------------------------------------------------------------------------------------------\n')
 
     # Remove empty messages that may result from splitting
@@ -58,10 +58,10 @@ def main():
 
     # Send sample data to Telegram
     # response = send_api_data_to_telegram(sample_data)
-    response = send_api_data_to_telegram(create_msg())
+    #response = send_api_data_to_telegram(create_msg_telegram())
 
-    print("Response from Telegram API:", response)
-    send_api_data_to_telegram(load_data_from_json())
+    #print("Response from Telegram API:", response)
+    #send_api_data_to_telegram(load_data_from_json())
 
 if __name__ == "__main__":
     main()
