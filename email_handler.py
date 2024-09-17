@@ -1,14 +1,12 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import json
 import os
-
-import create_msg
+from create_msg import create_msg_html
 
 
 # Function to send an email with the API data
-def send_email(api_data, recipient_emails):
+def send_email(recipient_emails):
     sender_email = "jobsearchtest2@outlook.com"
     sender_password = "noodleMayo"
     smtp_server = "smtp-mail.outlook.com"
@@ -21,8 +19,10 @@ def send_email(api_data, recipient_emails):
     msg['Subject'] = "API Data Collected"
 
     # Convert API data (JSON) to a formatted string
-    body = create_msg.create_msg()
-    msg.attach(MIMEText(body, 'plain'))
+
+    # HTML version
+    html_body = create_msg_html()
+    msg.attach(MIMEText(html_body, 'html'))
 
     try:
         # Connect to the server and send the email
