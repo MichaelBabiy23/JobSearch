@@ -1,3 +1,4 @@
+from api_handler import load_data_from_json
 from create_msg import create_msg
 import requests
 
@@ -5,6 +6,7 @@ import requests
 # Define your bot token and chat ID here
 BOT_TOKEN = "7025704078:AAF-P5aLqWxc0DFJO81GkOn03S4UU1hHQJ0"
 CHAT_ID = "-1002424155477"
+
 
 def send_api_data_to_telegram(api_data):
     """
@@ -14,19 +16,28 @@ def send_api_data_to_telegram(api_data):
     """
     api_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
-    # Format the API data into a message string
-    formatted_message = create_msg()
+    # Extract the job messages
+    job_messages = create_msg().split(
+        '---------------------------------------------------------------------------------------------\n')
 
-    # Prepare payload
-    payload = {
-        "chat_id": CHAT_ID,
-        "text": formatted_message,
-        "parse_mode": "HTML"  # Optional: Formats text as HTML
-    }
+    # Remove empty messages that may result from splitting
+    job_messages = [msg.strip() for msg in job_messages if msg.strip()]
 
-    # Send the message
-    response = requests.post(api_url, json=payload)
-    return response.json()
+    # Send each job message separately
+    responses = []
+    for job_message in job_messages:
+        payload = {
+            "chat_id": CHAT_ID,
+            "text": job_message,
+            "parse_mode": "HTML"  # Optional: Formats text as HTML
+        }
+
+        # Send the message
+        response = requests.post(api_url, json=payload)
+        responses.append(response.json())
+
+    return responses
+
 
 def main():
     # Sample API data to test the function
@@ -46,8 +57,11 @@ def main():
     ]
 
     # Send sample data to Telegram
-    response = send_api_data_to_telegram(sample_data)
+    # response = send_api_data_to_telegram(sample_data)
+    response = send_api_data_to_telegram(create_msg())
+
     print("Response from Telegram API:", response)
+    send_api_data_to_telegram(load_data_from_json())
 
 if __name__ == "__main__":
     main()
