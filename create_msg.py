@@ -1,54 +1,54 @@
 # Create msg for mail
 import json
 
-
-def create_msg():
-
+def create_msg_html():
     with open('data.json', 'r') as f:
         api_data = json.load(f)
 
-    msg = ''
+    html_content = """
+    <html>
+    <body>
+    <h1>Job Listings</h1>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Job Link</th>
+            <th>Job Type</th>
+        </tr>
+    """
 
     for job in api_data['jobs']:
-        msg += create_job_msg(job)
+        html_content += create_job_html(job)
 
-    return msg
+    html_content += """
+    </table>
+    </body>
+    </html>
+    """
 
+    return html_content
 
-# Create msg for each job
-def create_job_msg(job):
-
+def create_job_html(job):
     web = prioritised_websites(job)
 
-    job_msg = ('Job name : ' + job['title'] + '\n'
-                + 'Company name : ' + job['company'] + '\n'
-                + 'Location : ' + job['location'] + '\n'
-                + 'Job link : ' + web + '\n'
-                + 'Job type : ' + job['employmentType'] + '\n'
-                + '---------------------------------------------------------------------------------------------' + '\n'
-                )
+    job_html = f"""
+    <tr>
+        <td>{job['title']}</td>
+        <td>{job['company']}</td>
+        <td>{job['location']}</td>
+        <td>{web}</td>
+        <td>{job['employmentType']}</td>
+    </tr>
+    """
 
-    return job_msg
+    return job_html
 
-
-# Priorities LinkedIn
 def prioritised_websites(job):
-
-    web = ''
-
     for website in job['jobProviders']:
         if website['jobProvider'] == 'LinkedIn':
-            web = website['url']
-            break
+            return f'<a href="{website["url"]}">LinkedIn</a>'
 
-    if web:
-        return web
-    else:
-        return job['jobProviders'][0]['url']
-
-
-#job name:
-#comp name:
-#location:
-#job link:
-#job type:
+    # If LinkedIn is not found, use the first available job provider
+    return f'<a href="{job["jobProviders"][0]["url"]}">{job["jobProviders"][0]["jobProvider"]}</a>'

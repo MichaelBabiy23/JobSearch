@@ -1,4 +1,4 @@
-from create_msg import create_msg
+from create_msg import create_msg_html
 import requests
 
 
@@ -6,7 +6,7 @@ import requests
 BOT_TOKEN = "7025704078:AAF-P5aLqWxc0DFJO81GkOn03S4UU1hHQJ0"
 CHAT_ID = "-1002424155477"
 
-def send_api_data_to_telegram(api_data):
+def send_api_data_to_telegram():
     """
     Sends API data to a specified Telegram chat using a bot.
 
@@ -15,7 +15,7 @@ def send_api_data_to_telegram(api_data):
     api_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
     # Format the API data into a message string
-    formatted_message = create_msg()
+    formatted_message = create_msg_html()
 
     # Prepare payload
     payload = {
@@ -46,8 +46,9 @@ def main():
     ]
 
     # Send sample data to Telegram
-    response = send_api_data_to_telegram(sample_data)
+    response = send_api_data_to_telegram()
     print("Response from Telegram API:", response)
+
 
 if __name__ == "__main__":
     main()
