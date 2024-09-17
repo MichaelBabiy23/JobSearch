@@ -4,6 +4,8 @@ from email.mime.multipart import MIMEMultipart
 import json
 import os
 
+import create_msg
+
 
 # Function to send an email with the API data
 def send_email(api_data, recipient_emails):
@@ -19,7 +21,7 @@ def send_email(api_data, recipient_emails):
     msg['Subject'] = "API Data Collected"
 
     # Convert API data (JSON) to a formatted string
-    body = json.dumps(api_data, indent=4)
+    body = create_msg.create_msg()
     msg.attach(MIMEText(body, 'plain'))
 
     try:
