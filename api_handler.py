@@ -3,7 +3,8 @@ import json
 import os
 from tkinter import messagebox
 
-api_keys = ["aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12", "81d662f1afmshd71bddf20a63757p13654ajsn8b46b22961d6",
+api_keys = ["aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12",
+            "81d662f1afmshd71bddf20a63757p13654ajsn8b46b22961d6",
             "9d72d9cc25msh53ee03b6851a7f8p1ce3a5jsnfdc0fd11daa4"]
 counter = 0
 
@@ -49,7 +50,7 @@ def send_request():
         return
     # Make the API request
     # API endpoint and default headers
-    url = "jobs-api14.p.rapidapi.com"
+    url = "https://jobs-api14.p.rapidapi.com/list"
     headers = {
         "X-RapidAPI-Key": api_keys[counter],
         "X-RapidAPI-Host": "jobs-api14.p.rapidapi.com"
