@@ -7,9 +7,9 @@ import os
 
 # Function to send an email with the API data
 def send_email(api_data, recipient_emails):
-    sender_email = "zelmanyoni@gmail.com"
-    sender_password = "noodleMayo" # TODO: fix error 535, login problem
-    smtp_server = "smtp.gmail.com"
+    sender_email = "jobsearchtest2@outlook.com"
+    sender_password = "noodleMayo"
+    smtp_server = "smtp-mail.outlook.com"
     smtp_port = 587
 
     # Create the email

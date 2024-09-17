@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from api_handler import save_to_json, send_request, load_from_json
+from api_handler import save_data_to_json, load_data_from_json, load_query_from_json, save_query_to_json, send_request
 from email_handler import send_email, add_email_to_file, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
 
@@ -8,7 +8,7 @@ from telegram_handler import send_api_data_to_telegram
 # Function to create the UI
 def create_ui():
     # Load previous querystring and Telegram data
-    data = load_from_json()
+    data = load_query_from_json()
 
     # Create the main window
     root = tk.Tk()
@@ -82,7 +82,7 @@ def create_ui():
             "remote_jobs_only": remote_jobs_combobox.get(),
             "employment_types": employment_types_entry.get()
         }
-        save_to_json(data)
+        save_query_to_json(data)
 
     save_button = tk.Button(root, text="Save Query Parameters", command=save_querystring)
     save_button.grid(row=13, column=0, columnspan=2, padx=10, pady=10)
@@ -90,7 +90,7 @@ def create_ui():
     # Send request and email button
     def request_and_email():
         send_request()
-        api_data = load_from_json()
+        api_data = load_data_from_json()
         recipient_emails = load_emails_from_file()
         if recipient_emails:
             send_email(api_data, recipient_emails)
