@@ -1,4 +1,3 @@
-# Create msg for mail
 import json
 from groq import Groq
 
@@ -53,7 +52,7 @@ client = Groq(api_key=API_KEY)
 # Function to interact with the Groq chatbot API
 def generate_groq_response(prompt):
     try:
-        print("Generating message")
+        # print("Generating message")
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": "You are an assistant that helps generate job descriptions and salary "

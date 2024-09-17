@@ -139,7 +139,7 @@ def create_ui(
         api_data = load_data_from_json()
         recipient_emails = load_emails_from_file()
         if recipient_emails:
-            send_email(api_data, recipient_emails)
+            send_email(recipient_emails)
         else:
             print("No email addresses found. Please add at least one email.")
 
