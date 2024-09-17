@@ -38,13 +38,13 @@ def prioritised_websites(job):
 
     for website in job['jobProviders']:
         if website['jobProvider'] == 'LinkedIn':
-            web = 'LinkedIn'
+            web = website['url']
             break
 
     if web:
         return web
     else:
-        return job['jobProviders'][0]['jobProvider']
+        return job['jobProviders'][0]['url']
 
 
 #job name:
