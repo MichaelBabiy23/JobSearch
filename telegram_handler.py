@@ -29,6 +29,8 @@ def send_api_data_to_telegram(api_data):
     current_message = ""
     responses = []
 
+    message_counter = 1
+
     for job_message in job_messages:
         # Parse the job details from the message
         # print(job_message)
@@ -52,6 +54,12 @@ def send_api_data_to_telegram(api_data):
                 }
                 # print("sending")
                 response = requests.post(api_url, json=payload)
+                # checks if message send successfully
+                if response.status_code == 200:
+                    print(f"Message {message_counter} sent successfully.")
+                else:
+                    print(f"Message {message_counter} failed.")
+                message_counter += 1
                 # print(response)
                 responses.append(response.json())
 
@@ -71,6 +79,10 @@ def send_api_data_to_telegram(api_data):
             "parse_mode": "Markdown"
         }
         response = requests.post(api_url, json=payload)
+        if response.status_code == 200:
+            print(f"Message {message_counter} sent successfully.")
+        else:
+            print(f"Message {message_counter} failed.")
         # print(response)
         responses.append(response.json())
 

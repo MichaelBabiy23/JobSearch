@@ -50,6 +50,7 @@ def send_request():
     save_counter(counter)
 
     response = requests.get(url, headers=headers, params=querystring)
+    response.raise_for_status()
 
     # Check the status of the request
     if response.status_code == 200:
@@ -61,9 +62,9 @@ def send_request():
         # Print the API response in the console
         # print(json.dumps(data, indent=4))
         save_data_to_json(data)
-        messagebox.showinfo("Success", "API Request successful. Check console for response.")
+        print("Success, API Request successful.")
     else:
-        messagebox.showerror("Error", f"API Request failed: {response.status_code}")
+        print(f"Error, API Request failed: {response.status_code}")
 
 
 def main():
