@@ -8,7 +8,7 @@ api_keys = ["aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12",
             "9d72d9cc25msh53ee03b6851a7f8p1ce3a5jsnfdc0fd11daa4"]
 
 # JSON file to store query information
-json_file = "querystring.json"
+json_file = "queries.json"
 data_json_file = "data.json"
 counter_file = "counter.txt"
 
@@ -49,7 +49,7 @@ def load_query_from_json():
 def save_data_to_json(datastring):
     with open(data_json_file, 'w') as f:
         f.write(json.dumps(datastring, indent=4))
-    messagebox.showinfo("Success", "data saved to JSON file")
+    # messagebox.showinfo("Success", "data saved to JSON file")
 
 
 # Function to load collected data from JSON file

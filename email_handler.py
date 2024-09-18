@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 import os
 from create_msg import create_msg_mail
 
+
 # Function to send an email with the API data
 def send_email(recipient_emails):
     sender_email = "jobsearchtest2@outlook.com"
@@ -52,8 +53,10 @@ def add_email_to_file(new_email):
         f.write(new_email + '\n')
     print(f"Added {new_email} to emails.txt")
 
+
 def main():
     send_email(load_emails_from_file())
+
 
 if __name__ == "__main__":
     main()
