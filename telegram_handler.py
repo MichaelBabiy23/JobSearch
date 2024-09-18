@@ -1,5 +1,7 @@
 import os
 import json
+from datetime import datetime, timedelta
+
 import requests
 from api_handler import load_data_from_data_json
 from create_msg import create_msg_telegram
@@ -43,6 +45,7 @@ def add_job(new_job):
             for job in jobs
     ):
         new_job['id'] = get_next_id(jobs)  # Add unique ID
+        new_job['store_date'] = datetime.now().date().isoformat()  # Store only the date
         jobs.append(new_job)
         save_jobs(jobs)
         return True
@@ -126,10 +129,24 @@ def parse_job_message(job_message):
     }
 
 
+def remove_old_jobs():
+    """Removes jobs older than one month from the JSON file."""
+    jobs = load_data()
+    one_month_ago = datetime.now() - timedelta(days=30)
+
+    # Keep only jobs that are not older than one month
+    updated_jobs = [
+        job for job in jobs
+        if datetime.fromisoformat(job['store_date']) > one_month_ago
+    ]
+
+    save_jobs(updated_jobs)
+
+
 def main():
     # Send sample data to Telegram
     send_api_data_to_telegram(load_data_from_data_json())
-
+    # remove_old_jobs()
 
 if __name__ == "__main__":
     main()
