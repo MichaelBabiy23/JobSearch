@@ -96,9 +96,8 @@ def send_request(querystring):
     else:
         print(f"Error, API Request failed: {response.status_code}")
 
-
 def main():
-    send_request()
+    send_request(load_query_from_json())
 
 
 if __name__ == "__main__":

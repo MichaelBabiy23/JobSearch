@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 import json
 import os
 from api_handler import save_data_to_json, load_data_from_data_json, send_request
+from create_msg import create_job_msg
 from responses_funcs import remove_duplicates
 from tkinter import ttk
 from json_file_funcs import load_data_from_data_json, load_query_from_json, save_query_to_json
@@ -230,6 +231,16 @@ def request_and_notify():
     for query_data in selected_queries:
         send_request(query_data)
         remove_duplicates()
+
+        api_data = load_data_from_data_json()
+        for job in api_data['jobs']:
+            temp_list = create_job_msg(job)
+            job['web'] =  temp_list[0]
+            job['description'] =  temp_list[1]
+            job['salary'] =  temp_list[2]
+
+        save_data_to_json(api_data)
+
         recipient_emails = load_emails_from_file()
         if recipient_emails:
             send_email(recipient_emails)

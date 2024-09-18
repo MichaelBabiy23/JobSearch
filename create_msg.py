@@ -1,12 +1,12 @@
 import json
 
-from json_file_funcs import add_job, load_data_from_data_json
 from groq import Groq
+
+from json_file_funcs import load_data_from_data_json
 
 
 def create_msg_mail():
-    with open('data.json', 'r') as f:
-        api_data = json.load(f)
+    api_data = load_data_from_data_json()
 
     html_content = """
     <html>
@@ -26,13 +26,7 @@ def create_msg_mail():
     """
 
     for job in api_data['jobs']:
-        new_mail_job = {
-            "job_name": job["title"],
-            "company": job["company"],
-            "location": job["location"]
-        }
-        if add_job(new_mail_job):
-            html_content += create_job_msg_mail(job)
+        html_content += create_job_msg_mail(job)
 
     html_content += """
     </table>
@@ -43,7 +37,7 @@ def create_msg_mail():
     return html_content
 
 def create_job_msg_mail(job):
-    web, description, salary = create_job_msg(job)
+    web, description, salary = job['web'], job['description'], job['salary']
 
     job_html = f"""
     <tr>
@@ -90,8 +84,7 @@ def generate_groq_response(prompt):
 
 # Create msg for telegram
 def create_msg_telegram():
-    with open('data.json', 'r') as f:
-        api_data = json.load(f)
+    api_data = load_data_from_data_json()
 
     msg = ''
 
@@ -100,15 +93,14 @@ def create_msg_telegram():
 
     return msg
 
-
 # Create msg for each job with description and salary hypothesis
 def create_job_msg_telegram(job):
-    web, description, salary = create_job_msg(job)
+    web, description, salary = job['web'], job['description'], job['salary']
 
     job_msg = (f"Job Name: {job['title']}\n"
                f"Company Name: {job['company']}\n"
                f"Location: {job['location']}\n"
-               f"Job Link: [{prioritised_websites(job)['jobProvider']}]({web['url']})\n"
+               f"Job Link: [{web['jobProvider']}]({web['url']})\n"
                f"Job Type: {job['employmentType']}\n"
                f"{description}\n"
                f"Estimated Salary: {salary}\n"
@@ -117,19 +109,6 @@ def create_job_msg_telegram(job):
                )
 
     return job_msg
-
-
-# Create general job msg for both mail and telegram (web, description, and salary)
-def create_job_msg(job):
-    web = prioritised_websites(job)
-
-    # Call Groq API to generate a job description
-    description = generate_job_description(job)
-
-    # Hypothesize the salary range using Groq API
-    salary = generate_salary_hypothesis(job)
-
-    return [web, description, salary]
 
 # Generate a job description using Groq API
 def generate_job_description(job):
@@ -150,6 +129,17 @@ def prioritised_websites(job):
             return website  # Return the whole object
     return job['jobProviders'][0]  # Return the first provider if LinkedIn is not found
 
+# Create general job msg for both mail and telegram (web, description, and salary)
+def create_job_msg(job):
+    web = prioritised_websites(job)
+
+    # Call Groq API to generate a job description
+    description = generate_job_description(job)
+
+    # Hypothesize the salary range using Groq API
+    salary = generate_salary_hypothesis(job)
+
+    return [web, description, salary]
 
 
 # Main function
