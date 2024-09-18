@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from api_handler import save_data_to_json, load_data_from_json, load_query_from_json, save_query_to_json, send_request
+from api_handler import save_data_to_json, load_data_from_data_json, load_query_from_json, save_query_to_json, send_request
 from email_handler import send_email, add_email_to_file, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
 
@@ -136,7 +136,7 @@ def create_ui(
     # Send request and send data to emails and telegram
     def request_and_notify():
         send_request()
-        api_data = load_data_from_json()
+        api_data = load_data_from_data_json()
         recipient_emails = load_emails_from_file()
         if recipient_emails:
             send_email(recipient_emails)
