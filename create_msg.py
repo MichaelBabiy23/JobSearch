@@ -56,7 +56,7 @@ def create_job_html(job):
         <td>{job['title']}</td>
         <td>{job['company']}</td>
         <td>{job['location']}</td>
-        <td>{web}</td>
+        <td><a href="{web['url']}">{web['jobProvider']}</a></td>
         <td>{job['employmentType']}</td>
         <td>{description}</td>
         <td>{salary}</td>
@@ -102,13 +102,13 @@ def create_msg_telegram():
     msg = ''
 
     for job in api_data['jobs']:
-        msg += create_job_msg(job)
+        msg += create_job_msg_telegram(job)
 
     return msg
 
 
 # Create msg for each job with description and salary hypothesis
-def create_job_msg(job):
+def create_job_msg_telegram(job):
     web = prioritised_websites(job)
 
     # Call Groq API to generate a job description
@@ -117,14 +117,14 @@ def create_job_msg(job):
     # Hypothesize the salary range using Groq API
     salary = generate_salary_hypothesis(job)
 
-    job_msg = (f"Job Name : {job['title']}\n"
-               f"Company Name : {job['company']}\n"
-               f"Location : {job['location']}\n"
-               f"Job Link : {web}\n"
-               f"Job Type : {job['employmentType']}\n"
+    job_msg = (f"Job Name: {job['title']}\n"
+               f"Company Name: {job['company']}\n"
+               f"Location: {job['location']}\n"
+               f"Job Link: [{prioritised_websites(job)['jobProvider']}]({web['url']})\n"
+               f"Job Type: {job['employmentType']}\n"
                f"{description}\n"
-               f"Estimated Salary : {salary}\n"
-               f"Date Posted : {job['datePosted']}\n"
+               f"Estimated Salary: {salary}\n"
+               f"Date Posted: {job['datePosted']}\n"
                "---------------------------------------------------------------------------------------------\n"
                )
 
@@ -145,17 +145,11 @@ def generate_salary_hypothesis(job):
 
 # Prioritize LinkedIn for job link
 def prioritised_websites(job):
-    web = ''
-
     for website in job['jobProviders']:
         if website['jobProvider'] == 'LinkedIn':
-            web = 'LinkedIn'
-            break
+            return website  # Return the whole object
+    return job['jobProviders'][0]  # Return the first provider if LinkedIn is not found
 
-    if web:
-        return web
-    else:
-        return job['jobProviders'][0]['jobProvider']
 
 
 # Main function
@@ -165,6 +159,7 @@ def main():
     # Print the generated job messages
     # print(job_messages)
     create_msg_mail()
+
 
 
 if __name__ == "__main__":
