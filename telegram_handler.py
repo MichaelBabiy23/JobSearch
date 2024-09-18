@@ -1,9 +1,8 @@
-from datetime import datetime, timedelta
 
 import requests
 from json_file_funcs import load_data_from_data_json
 from create_msg import create_msg_telegram
-from json_file_funcs import add_job, load_data, save_jobs
+from responses_funcs import add_jobs_to_responses
 
 # Define your bot token and chat ID here
 BOT_TOKEN = "7025704078:AAF-P5aLqWxc0DFJO81GkOn03S4UU1hHQJ0"
@@ -41,7 +40,7 @@ def send_api_data_to_telegram(api_data):
         }
         # print(new_job)
         # Attempt to add the job, only send if it was added
-        if add_job(new_job):
+        if add_jobs_to_responses(new_job):
             # Check if adding the job message exceeds the limit
             if len(current_message) + len(job_message) + 1 > 4096:  # +1 for newline or space
                 # Send the current aggregated message
@@ -88,21 +87,6 @@ def parse_job_message(job_message):
         "company": company_name,
         "location": location
     }
-
-
-def remove_old_jobs():
-    """Removes jobs older than one month from the JSON file."""
-    jobs = load_data()
-    one_month_ago = datetime.now() - timedelta(days=30)
-
-    # Keep only jobs that are not older than one month
-    updated_jobs = [
-        job for job in jobs
-        if datetime.fromisoformat(job['store_date']) > one_month_ago
-    ]
-
-    save_jobs(updated_jobs)
-
 
 def main():
     # Send sample data to Telegram

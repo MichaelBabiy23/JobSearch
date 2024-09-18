@@ -1,5 +1,6 @@
 import json
-from json_file_funcs import add_job
+
+from json_file_funcs import add_job, load_data_from_data_json
 from groq import Groq
 
 
@@ -31,7 +32,7 @@ def create_msg_mail():
             "location": job["location"]
         }
         if add_job(new_mail_job):
-            html_content += create_job_html(job)
+            html_content += create_job_msg_mail(job)
 
     html_content += """
     </table>
@@ -41,15 +42,8 @@ def create_msg_mail():
 
     return html_content
 
-
-def create_job_html(job):
-    web = prioritised_websites(job)
-
-    # Call Groq API to generate a job description
-    description = generate_job_description(job)
-
-    # Hypothesize the salary range using Groq API
-    salary = generate_salary_hypothesis(job)
+def create_job_msg_mail(job):
+    web, description, salary = create_job_msg(job)
 
     job_html = f"""
     <tr>
@@ -109,13 +103,7 @@ def create_msg_telegram():
 
 # Create msg for each job with description and salary hypothesis
 def create_job_msg_telegram(job):
-    web = prioritised_websites(job)
-
-    # Call Groq API to generate a job description
-    description = generate_job_description(job)
-
-    # Hypothesize the salary range using Groq API
-    salary = generate_salary_hypothesis(job)
+    web, description, salary = create_job_msg(job)
 
     job_msg = (f"Job Name: {job['title']}\n"
                f"Company Name: {job['company']}\n"
@@ -130,6 +118,18 @@ def create_job_msg_telegram(job):
 
     return job_msg
 
+
+# Create general job msg for both mail and telegram (web, description, and salary)
+def create_job_msg(job):
+    web = prioritised_websites(job)
+
+    # Call Groq API to generate a job description
+    description = generate_job_description(job)
+
+    # Hypothesize the salary range using Groq API
+    salary = generate_salary_hypothesis(job)
+
+    return [web, description, salary]
 
 # Generate a job description using Groq API
 def generate_job_description(job):
@@ -158,9 +158,7 @@ def main():
     # job_messages = create_msg_mail()
     # Print the generated job messages
     # print(job_messages)
-    create_msg_mail()
-
-
+    re = 1
 
 if __name__ == "__main__":
     main()
