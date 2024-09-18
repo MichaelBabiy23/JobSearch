@@ -12,10 +12,12 @@ json_file = "querystring.json"
 data_json_file = "data.json"
 counter_file = "counter.txt"
 
+
 # Function to save counter to txt file
 def save_counter(counter):
     with open(counter_file, 'w') as f:
         f.write(str(counter))
+
 
 # Function to load counter from txt file
 def load_counter():
@@ -24,13 +26,16 @@ def load_counter():
             return int(f.read())
     return 0
 
+
 counter = load_counter()
+
 
 # Function to save querystring to JSON file
 def save_query_to_json(querystring):
     with open(json_file, 'w') as f:
         json.dump(querystring, f)
     messagebox.showinfo("Success", "Query parameters saved to JSON file")
+
 
 # Function to load querystring from JSON file
 def load_query_from_json():
@@ -46,12 +51,14 @@ def save_data_to_json(datastring):
         f.write(json.dumps(datastring, indent=4))
     messagebox.showinfo("Success", "data saved to JSON file")
 
+
 # Function to load collected data from JSON file
 def load_data_from_data_json():
     if os.path.exists(json_file):
         with open(data_json_file, 'r') as f:
             return json.load(f)
     return {}  # Return empty dictionary if file does not exist
+
 
 # Function to send the API request using stored querystring
 def send_request():
@@ -62,7 +69,7 @@ def send_request():
     if not querystring:
         messagebox.showerror("Error", "No query parameters found. Please set the parameters.")
         return
-    
+
     # Make the API request
     # API endpoint and default headers
     url = "https://jobs-api14.p.rapidapi.com/list"
@@ -84,14 +91,16 @@ def send_request():
                 job['location'] = job['location'].replace(", Israel", "").strip()
 
         # Print the API response in the console
-        print(json.dumps(data, indent=4))
+        # print(json.dumps(data, indent=4))
         save_data_to_json(data)
         messagebox.showinfo("Success", "API Request successful. Check console for response.")
     else:
         messagebox.showerror("Error", f"API Request failed: {response.status_code}")
 
+
 def main():
     send_request()
+
 
 if __name__ == "__main__":
     main()
