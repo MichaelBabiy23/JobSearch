@@ -2,8 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import json
 import os
-from api_handler import save_data_to_json, load_data_from_data_json, load_query_from_json, save_query_to_json, \
-    send_request
+from api_handler import save_data_to_json, load_data_from_data_json, send_request
 from email_handler import send_email, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
 
@@ -11,19 +10,19 @@ from telegram_handler import send_api_data_to_telegram
 QUERY_FILE = 'queries.json'
 
 
+# Load queries from a JSON file
 def load_queries():
-    """ Load queries from a JSON file. """
     if os.path.exists(QUERY_FILE):
         with open(QUERY_FILE, 'r') as f:
             try:
-                return json.load(f)  # Ensure it loads a list of dictionaries
+                return json.load(f)
             except json.JSONDecodeError:
-                return []  # Return an empty list if the file is empty or invalid
+                return []
     return []
 
 
+# Save queries to a JSON file
 def save_queries(queries):
-    """ Save queries to a JSON file. """
     with open(QUERY_FILE, 'w') as f:
         json.dump(queries, f)
 
@@ -39,9 +38,6 @@ def create_ui(
         initial_remote_only="",
         initial_employment_types="fulltime;parttime;intern;contractor",
 ):
-    """
-    Creates the UI for the API query editor.
-    """
     # Load previous queries if they exist
     queries = load_queries()
 
@@ -143,56 +139,61 @@ def create_ui(
     query_listbox.grid(row=20, column=0, columnspan=2, padx=10, pady=10)
 
     def populate_query_list():
+        # print("clearing")
         query_listbox.delete(0, tk.END)  # Clear current list
         for query in queries:
-            if isinstance(query, dict) and 'query' in query and 'location' in query:
-                query_listbox.insert(tk.END, f"{query['query']} - {query['location']}")
+            if isinstance(query, dict) and 'query' in query and 'location' in query and 'isChecked' in query:
+                query_listbox.insert(tk.END,
+                                     f"{query['query']} - {query['location']} - {"(Will be sent)" if query['isChecked'] else "(Won't be sent)"}")
 
     # Manage Queries Button
-    manage_button = ttk.Button(main_frame, text="Manage Queries", command=lambda: show_manage_window(queries))
-    manage_button.grid(row=21, column=0, columnspan=2, padx=10, pady=10)
-
-    # Send Queries Button
-    send_button = ttk.Button(main_frame, text="Send Selected Queries", command=request_and_notify)
-    send_button.grid(row=22, column=0, columnspan=2, padx=10, pady=10)
-
-    def send_selected_queries():
-        selected_indices = query_listbox.curselection()
-        if selected_indices:
-            selected_queries = [queries[i] for i in selected_indices]
-            print("Sending Queries:", selected_queries)  # Replace this with actual sending logic
-            messagebox.showinfo("Success", "Selected queries sent successfully!")
-        else:
-            messagebox.showwarning("Selection Error", "No queries selected.")
-
-    def show_manage_window(queries):
+    def show_manage_window():
         manage_window = tk.Toplevel(root)
         manage_window.title("Manage Queries")
 
-        for widget in manage_window.winfo_children():
-            widget.destroy()
+        if not queries:
+            manage_window.destroy()
 
         for index, query_data in enumerate(queries):
             frame = ttk.Frame(manage_window)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            var = tk.BooleanVar(value=False)
-            checkbox = ttk.Checkbutton(frame, text=query_data.get("query", "Unnamed Query"), variable=var)
+            # Ensure isChecked is in the query_data, default to False if not present
+            if 'isChecked' not in query_data:
+                query_data['isChecked'] = False
+
+            var = tk.BooleanVar(value=query_data['isChecked'])  # Initialize with current checked state
+
+            # Define a function to update the checkbox state and JSON
+            def toggle_check(var, query_data):
+                query_data['isChecked'] = var.get()  # Update the JSON entry
+                save_queries(queries)  # Save changes to JSON
+                populate_query_list()
+
+            checkbox = ttk.Checkbutton(frame, text=query_data.get("query", "Unnamed Query"), variable=var,
+                                       command=lambda v=var, q=query_data: toggle_check(v, q))
             checkbox.pack(side=tk.LEFT)
 
             remove_button = ttk.Button(frame, text="Remove", command=lambda i=index: remove_query(i))
             remove_button.pack(side=tk.RIGHT)
 
-            # Store variable reference for later use
-            queries[index]["send"] = var
-
-        def remove_query(index):
-            del queries[index]
-            save_queries(queries)
-            show_manage_window(queries)  # Refresh the manage window
+            def remove_query(index):
+                del queries[index]
+                save_queries(queries)
+                manage_window.destroy()
+                show_manage_window()  # Refresh the manage window
+                populate_query_list()
 
     # Populate the initial query list
     populate_query_list()
+
+    # Create Manage Queries Button after defining show_manage_window
+    manage_button = ttk.Button(main_frame, text="Manage Queries", command=show_manage_window)
+    manage_button.grid(row=21, column=0, columnspan=2, padx=10, pady=10)
+
+    # Send Queries Button
+    send_button = ttk.Button(main_frame, text="Send Selected Queries", command=request_and_notify)
+    send_button.grid(row=22, column=0, columnspan=2, padx=10, pady=10)
 
     # Adjust window size based on content
     root.update_idletasks()
@@ -210,21 +211,29 @@ def create_ui(
     # Set window size and position
     root.geometry(f"{window_width}x{window_height}+{position_x}+{position_y}")
 
+    # Start the UI
     root.mainloop()
 
 
-# Send request and send data to emails and telegram
+# Send request and notify recipients based on selected queries
 def request_and_notify():
-    send_request()
-    api_data = load_data_from_data_json()
-    recipient_emails = load_emails_from_file()
-    if recipient_emails:
-        send_email(recipient_emails)
-    else:
-        print("No email addresses found. Please add at least one email.")
+    queries = load_queries()
+    selected_queries = [query for query in queries if query.get("isChecked")]  # Collect only selected queries
+    if not selected_queries:
+        messagebox.showwarning("Selection Error", "No queries selected.")
+        return
 
-    # Send the data to Telegram
-    send_api_data_to_telegram(api_data)
+    for query_data in selected_queries:
+        send_request(query_data)
+
+        recipient_emails = load_emails_from_file()
+        if recipient_emails:
+            send_email(recipient_emails)
+        else:
+            print("No email addresses found. Please add at least one email.")
+
+        # Send the data to Telegram
+        # send_api_data_to_telegram(api_data)
 
 
 # Start the UI

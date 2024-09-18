@@ -61,10 +61,8 @@ def load_data_from_data_json():
 
 
 # Function to send the API request using stored querystring
-def send_request():
+def send_request(querystring):
     global counter
-    # Load querystring from the JSON file
-    querystring = load_query_from_json()
 
     if not querystring:
         messagebox.showerror("Error", "No query parameters found. Please set the parameters.")
