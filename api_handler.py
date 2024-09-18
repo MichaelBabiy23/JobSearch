@@ -47,7 +47,7 @@ def save_data_to_json(datastring):
     messagebox.showinfo("Success", "data saved to JSON file")
 
 # Function to load collected data from JSON file
-def load_data_from_json():
+def load_data_from_data_json():
     if os.path.exists(json_file):
         with open(data_json_file, 'r') as f:
             return json.load(f)
