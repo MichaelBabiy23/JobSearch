@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import os
 from tkinter import messagebox
@@ -26,9 +26,9 @@ def load_query_from_json():
 
 
 # Function to save collected data to JSON file
-def save_data_to_json(datastring):
+def save_data_to_json(data_string):
     with open(data_json_file, 'w') as f:
-        f.write(json.dumps(datastring, indent=4))
+        f.write(json.dumps(data_string, indent=4))
     messagebox.showinfo("Success", "data saved to JSON file")
 
 

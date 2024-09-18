@@ -1,5 +1,5 @@
 import requests
-from json_file_funcs import save_query_to_json, save_data_to_json, load_query_from_json, load_data_from_data_json
+from json_file_funcs import save_data_to_json, load_query_from_json
 import os
 from tkinter import messagebox
 

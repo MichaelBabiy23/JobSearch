@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-from api_handler import save_data_to_json, load_data_from_data_json, load_query_from_json, save_query_to_json, \
-    send_request
-from email_handler import send_email, add_email_to_file, load_emails_from_file
+from json_file_funcs import load_data_from_data_json, load_query_from_json, save_query_to_json
+from api_handler import send_request
+from email_handler import send_email, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
 
 

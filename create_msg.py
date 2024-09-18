@@ -1,4 +1,5 @@
 import json
+from json_file_funcs import add_job
 from groq import Groq
 
 
@@ -24,7 +25,13 @@ def create_msg_mail():
     """
 
     for job in api_data['jobs']:
-        html_content += create_job_html(job)
+        new_mail_job = {
+            "job_name": job["title"],
+            "company": job["company"],
+            "location": job["location"]
+        }
+        if add_job(new_mail_job):
+            html_content += create_job_html(job)
 
     html_content += """
     </table>
@@ -85,6 +92,7 @@ def generate_groq_response(prompt):
     except Exception as e:
         print(f"An error occurred: {e}")
         return "No response"
+
 
 # Create msg for telegram
 def create_msg_telegram():
@@ -156,7 +164,7 @@ def main():
     # job_messages = create_msg_mail()
     # Print the generated job messages
     # print(job_messages)
-    print("hello")
+    create_msg_mail()
 
 
 if __name__ == "__main__":

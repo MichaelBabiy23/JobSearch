@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 import requests
-from api_handler import load_data_from_data_json
+from json_file_funcs import load_data_from_data_json
 from create_msg import create_msg_telegram
 from json_file_funcs import add_job, load_data, save_jobs
 
@@ -104,6 +104,7 @@ def main():
     # Send sample data to Telegram
     send_api_data_to_telegram(load_data_from_data_json())
     # remove_old_jobs()
+
 
 if __name__ == "__main__":
     main()
