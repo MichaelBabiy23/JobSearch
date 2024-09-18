@@ -74,6 +74,7 @@ def send_api_data_to_telegram(api_data):
 
     for job_message in job_messages:
         # Parse the job details from the message
+        # print(job_message)
         job_details = parse_job_message(job_message)  # Assuming you create this function
         new_job = {
             "job_name": job_details['job_name'],
@@ -81,7 +82,7 @@ def send_api_data_to_telegram(api_data):
             "location": job_details['location'],
             "message": job_message
         }
-
+        # print(new_job)
         # Attempt to add the job, only send if it was added
         if add_job(new_job):
             # Check if adding the job message exceeds the limit
@@ -90,9 +91,11 @@ def send_api_data_to_telegram(api_data):
                 payload = {
                     "chat_id": CHAT_ID,
                     "text": current_message,
-                    "parse_mode": "HTML"
+                    "parse_mode": "Markdown"
                 }
+                # print("sending")
                 response = requests.post(api_url, json=payload)
+                # print(response)
                 responses.append(response.json())
 
                 # Start a new message with the current job message
@@ -108,9 +111,10 @@ def send_api_data_to_telegram(api_data):
         payload = {
             "chat_id": CHAT_ID,
             "text": current_message,
-            "parse_mode": "HTML"
+            "parse_mode": "Markdown"
         }
         response = requests.post(api_url, json=payload)
+        # print(response)
         responses.append(response.json())
 
     return responses
@@ -145,8 +149,10 @@ def remove_old_jobs():
 
 def main():
     # Send sample data to Telegram
-    send_api_data_to_telegram(load_data_from_data_json())
+    print(send_api_data_to_telegram(load_data_from_data_json()))
+    # print(load_data_from_data_json())
     # remove_old_jobs()
+
 
 if __name__ == "__main__":
     main()

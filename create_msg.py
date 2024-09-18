@@ -34,6 +34,7 @@ def create_msg_mail():
 
     return html_content
 
+
 def create_job_html(job):
     web = prioritised_websites(job)
 
@@ -48,7 +49,7 @@ def create_job_html(job):
         <td>{job['title']}</td>
         <td>{job['company']}</td>
         <td>{job['location']}</td>
-        <td>{web}</td>
+        <td><a href="{web['url']}">{web['jobProvider']}</a></td>
         <td>{job['employmentType']}</td>
         <td>{description}</td>
         <td>{salary}</td>
@@ -58,9 +59,11 @@ def create_job_html(job):
 
     return job_html
 
+
 # Set up the Groq client
 API_KEY = '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'
 client = Groq(api_key=API_KEY)
+
 
 # Function to interact with the Groq chatbot API
 def generate_groq_response(prompt):
@@ -83,6 +86,7 @@ def generate_groq_response(prompt):
         print(f"An error occurred: {e}")
         return "No response"
 
+
 # Create msg for telegram
 def create_msg_telegram():
     with open('data.json', 'r') as f:
@@ -91,12 +95,13 @@ def create_msg_telegram():
     msg = ''
 
     for job in api_data['jobs']:
-        msg += create_job_msg(job)
+        msg += create_job_msg_telegram(job)
 
     return msg
 
+
 # Create msg for each job with description and salary hypothesis
-def create_job_msg(job):
+def create_job_msg_telegram(job):
     web = prioritised_websites(job)
 
     # Call Groq API to generate a job description
@@ -105,42 +110,39 @@ def create_job_msg(job):
     # Hypothesize the salary range using Groq API
     salary = generate_salary_hypothesis(job)
 
-    job_msg = (f"Job Name : {job['title']}\n"
-               f"Company Name : {job['company']}\n"
-               f"Location : {job['location']}\n"
-               f"Job Link : {web}\n"
-               f"Job Type : {job['employmentType']}\n"
+    job_msg = (f"Job Name: {job['title']}\n"
+               f"Company Name: {job['company']}\n"
+               f"Location: {job['location']}\n"
+               f"Job Link: [{prioritised_websites(job)['jobProvider']}]({web['url']})\n"
+               f"Job Type: {job['employmentType']}\n"
                f"{description}\n"
-               f"Estimated Salary : {salary}\n"
-               f"Date Posted : {job['datePosted']}\n"
+               f"Estimated Salary: {salary}\n"
+               f"Date Posted: {job['datePosted']}\n"
                "---------------------------------------------------------------------------------------------\n"
                )
 
     return job_msg
+
 
 # Generate a job description using Groq API
 def generate_job_description(job):
     prompt = f"Create a short, professional description for the following job: {job['title']} at {job['company']} in {job['location']}."
     return generate_groq_response(prompt)
 
+
 # Generate a salary hypothesis using Groq API
 def generate_salary_hypothesis(job):
     prompt = f"Estimate the salary range for the following job: {job['title']} at {job['company']} in {job['location']}. The job type is {job['employmentType']}."
     return generate_groq_response(prompt)
 
+
 # Prioritize LinkedIn for job link
 def prioritised_websites(job):
-    web = ''
-
     for website in job['jobProviders']:
         if website['jobProvider'] == 'LinkedIn':
-            web = 'LinkedIn'
-            break
+            return website  # Return the whole object
+    return job['jobProviders'][0]  # Return the first provider if LinkedIn is not found
 
-    if web:
-        return web
-    else:
-        return job['jobProviders'][0]['jobProvider']
 
 # Main function
 def main():
@@ -149,6 +151,7 @@ def main():
     # Print the generated job messages
     # print(job_messages)
     print("hello")
+
 
 if __name__ == "__main__":
     main()
