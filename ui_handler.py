@@ -233,7 +233,7 @@ def request_and_notify():
             print("No email addresses found. Please add at least one email.")
 
         # Send the data to Telegram
-        # send_api_data_to_telegram(api_data)
+        send_api_data_to_telegram(load_data_from_data_json())
 
 
 # Start the UI
