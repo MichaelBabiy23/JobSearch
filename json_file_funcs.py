@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 import os
 from tkinter import messagebox
@@ -52,30 +51,3 @@ def save_jobs(jobs):
     """Saves the jobs to the JSON file."""
     with open(FILE_PATH, 'w') as file:
         file.write(json.dumps(jobs, indent=4))
-
-
-def get_next_id(jobs):
-    """Returns the next ID for a new job."""
-    if not jobs:
-        return 1
-    return max(job['id'] for job in jobs) + 1
-
-
-def add_job(new_job):
-    """Adds a new job to the JSON file if it doesn't exist."""
-    jobs = load_data()
-
-    # Check if a job with the same name, company, and location already exists
-    if not any(
-            job['job_name'] == new_job['job_name'] and
-            job['company'] == new_job['company'] and
-            job['location'] == new_job['location']
-            for job in jobs
-    ):
-        new_job['id'] = get_next_id(jobs)  # Add unique ID
-        new_job['store_date'] = datetime.now().date().isoformat()  # Store only the date
-        jobs.append(new_job)
-        save_jobs(jobs)
-        return True
-    else:
-        return False

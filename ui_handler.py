@@ -3,6 +3,10 @@ from tkinter import ttk, messagebox
 import json
 import os
 from api_handler import save_data_to_json, load_data_from_data_json, send_request
+from responses_funcs import remove_duplicates
+from tkinter import ttk
+from json_file_funcs import load_data_from_data_json, load_query_from_json, save_query_to_json
+from api_handler import send_request, api_keys
 from email_handler import send_email, load_emails_from_file
 from telegram_handler import send_api_data_to_telegram
 
@@ -225,7 +229,7 @@ def request_and_notify():
 
     for query_data in selected_queries:
         send_request(query_data)
-
+        remove_duplicates()
         recipient_emails = load_emails_from_file()
         if recipient_emails:
             send_email(recipient_emails)
@@ -238,4 +242,13 @@ def request_and_notify():
 
 # Start the UI
 if __name__ == "__main__":
-    create_ui()
+    # create_ui()
+    api_data = load_data_from_data_json()
+    recipient_emails = load_emails_from_file()
+    if recipient_emails:
+        send_email(recipient_emails)
+    else:
+        print("No email addresses found. Please add at least one email.")
+
+    # Send the data to Telegram
+    send_api_data_to_telegram(api_data)
