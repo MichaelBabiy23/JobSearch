@@ -1,56 +1,13 @@
-import os
-import json
 from datetime import datetime, timedelta
 
 import requests
 from api_handler import load_data_from_data_json
 from create_msg import create_msg_telegram
+from json_file_funcs import add_job, load_data, save_jobs
 
 # Define your bot token and chat ID here
 BOT_TOKEN = "7025704078:AAF-P5aLqWxc0DFJO81GkOn03S4UU1hHQJ0"
 CHAT_ID = "-1002424155477"
-FILE_PATH = "responses.json"
-
-
-def load_data():
-    """Loads existing data from the JSON file."""
-    if os.path.exists(FILE_PATH):
-        with open(FILE_PATH, 'r') as file:
-            return json.load(file)
-    return []
-
-
-def save_jobs(jobs):
-    """Saves the jobs to the JSON file."""
-    with open(FILE_PATH, 'w') as file:
-        file.write(json.dumps(jobs, indent=4))
-
-
-def get_next_id(jobs):
-    """Returns the next ID for a new job."""
-    if not jobs:
-        return 1
-    return max(job['id'] for job in jobs) + 1
-
-
-def add_job(new_job):
-    """Adds a new job to the JSON file if it doesn't exist."""
-    jobs = load_data()
-
-    # Check if a job with the same name, company, and location already exists
-    if not any(
-            job['job_name'] == new_job['job_name'] and
-            job['company'] == new_job['company'] and
-            job['location'] == new_job['location']
-            for job in jobs
-    ):
-        new_job['id'] = get_next_id(jobs)  # Add unique ID
-        new_job['store_date'] = datetime.now().date().isoformat()  # Store only the date
-        jobs.append(new_job)
-        save_jobs(jobs)
-        return True
-    else:
-        return False
 
 
 def send_api_data_to_telegram(api_data):

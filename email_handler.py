@@ -4,6 +4,8 @@ from email.mime.multipart import MIMEMultipart
 import os
 from create_msg import create_msg_mail
 
+
+
 # Function to send an email with the API data
 def send_email(recipient_emails):
     sender_email = "jobsearchtest2@outlook.com"
