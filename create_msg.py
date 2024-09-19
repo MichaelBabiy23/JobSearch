@@ -36,6 +36,7 @@ def create_msg_mail():
 
     return html_content
 
+
 def create_job_msg_mail(job):
     web, description, salary = job['web'], job['description'], job['salary']
 

@@ -5,7 +5,8 @@ from tkinter import messagebox
 
 api_keys = ["aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12",
             "81d662f1afmshd71bddf20a63757p13654ajsn8b46b22961d6",
-            "9d72d9cc25msh53ee03b6851a7f8p1ce3a5jsnfdc0fd11daa4"]
+            "9d72d9cc25msh53ee03b6851a7f8p1ce3a5jsnfdc0fd11daa4",
+            "c8dcd00371mshbc741f3bfa58834p1559d7jsn94f8beac8a85"]
 
 # JSON file to store query information
 json_file = "queries.json"
@@ -71,30 +72,44 @@ def send_request(querystring):
     # Make the API request
     # API endpoint and default headers
     url = "https://jobs-api14.p.rapidapi.com/list"
-    headers = {
-        "X-RapidAPI-Key": api_keys[counter],
-        "X-RapidAPI-Host": "jobs-api14.p.rapidapi.com"
-    }
 
-    counter = (counter + 1) % 3
+    counter = (counter + 1) % len(api_keys)
     save_counter(counter)
+    original_counter = counter
 
-    response = requests.get(url, headers=headers, params=querystring)
-    response.raise_for_status()
+    while True:
 
-    # Check the status of the request
-    if response.status_code == 200:
-        data = response.json()
-        for job in data['jobs']:
-            if job['location'] != "Israel":
-                job['location'] = job['location'].replace(", Israel", "").strip()
+        headers = {
+            "X-RapidAPI-Key": api_keys[counter],
+            "X-RapidAPI-Host": "jobs-api14.p.rapidapi.com"
+        }
 
-        # Print the API response in the console
-        # print(json.dumps(data, indent=4))
-        save_data_to_json(data)
-        print("Success, API Request successful.")
-    else:
-        print(f"Error, API Request failed: {response.status_code}")
+        response = requests.get(url, headers=headers, params=querystring)
+
+        # Check the status of the request
+        if response.status_code == 200:
+            data = response.json()
+            for job in data['jobs']:
+                if job['location'] != "Israel":
+                    job['location'] = job['location'].replace(", Israel", "").strip()
+
+            # Print the API response in the console
+            # print(json.dumps(data, indent=4))
+            save_data_to_json(data)
+            print("Success, API Request successful.")
+            break
+        elif response.status_code == 429:
+            if counter >= len(api_keys) - 1:
+                counter = 0
+            else:
+                counter += 1
+            if original_counter == counter:
+                print("Failed : All api keys full")
+                exit(2)
+        else:
+            print(f"Error, API Request failed: {response.status_code}")
+            break
+
 
 def main():
     send_request(load_query_from_json())
