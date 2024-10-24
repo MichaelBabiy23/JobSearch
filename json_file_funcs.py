@@ -33,7 +33,7 @@ def save_data_to_json(data_string):
 
 # Function to load collected data from JSON file
 def load_data_from_data_json():
-    if os.path.exists(json_file):
+    if os.path.exists(data_json_file):
         with open(data_json_file, 'r') as f:
             return json.load(f)
     return {}  # Return empty dictionary if file does not exist
