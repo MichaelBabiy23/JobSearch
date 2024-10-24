@@ -8,9 +8,13 @@ from create_msg import create_msg_mail
 # Function to send an email with the API data
 def send_email(recipient_emails):
     sender_email = "jobsearchtest2@outlook.com"
-    sender_password = "noodleMayo"
-    smtp_server = "smtp-mail.outlook.com"
+    sender_password = "jobsearchtestnoodleMayo@12"  # password for sendGrid user
+
+    # SendGrid SMTP configuration
+    smtp_server = 'smtp.sendgrid.net'
     smtp_port = 587
+    smtp_username = 'apikey'
+    smtp_password = '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'
 
     # Create the email
     msg = MIMEMultipart()
@@ -28,7 +32,7 @@ def send_email(recipient_emails):
         # Connect to the server and send the email
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()  # Secure the connection
-        server.login(sender_email, sender_password)
+        server.login(smtp_username, smtp_password)
         server.sendmail(sender_email, recipient_emails, msg.as_string())
         server.quit()
 
