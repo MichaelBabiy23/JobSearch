@@ -1,0 +1,11 @@
+[
+    {"query": "Software engineer student", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "0", "remoteOnly": "", "employmentTypes": "parttime;intern;contractor", "isChecked": true},
+    {"query": "Software developer intern", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "1", "remoteOnly": "", "employmentTypes": "parttime;intern", "isChecked": true},
+    {"query": "Junior software engineer", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "2", "remoteOnly": "", "employmentTypes": "parttime;intern", "isChecked": true},
+    {"query": "Backend developer student", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "3", "remoteOnly": "", "employmentTypes": "intern;contractor", "isChecked": true},
+    {"query": "Frontend developer intern", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "4", "remoteOnly": "", "employmentTypes": "intern", "isChecked": true},
+    {"query": "Full-stack developer student", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "5", "remoteOnly": "", "employmentTypes": "parttime;intern", "isChecked": true},
+    {"query": "DevOps intern", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "6", "remoteOnly": "", "employmentTypes": "intern;contractor", "isChecked": true},
+    {"query": "Mobile developer student", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "7", "remoteOnly": "", "employmentTypes": "parttime;intern", "isChecked": true},
+    {"query": "Data scientist intern", "location": "Israel", "distance": "-1.0", "language": "", "datePosted": "", "allowedJobProviders": "", "index": "8", "remoteOnly": "", "employmentTypes": "intern", "isChecked": true}
+]

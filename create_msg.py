@@ -57,7 +57,7 @@ def create_job_msg_mail(job):
 
 
 # Set up the Groq client
-API_KEY = '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'
+API_KEY = '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'
 client = Groq(api_key=API_KEY)
 
 
