@@ -149,7 +149,7 @@ def create_ui(
         for query in queries:
             if isinstance(query, dict) and 'query' in query and 'location' in query and 'isChecked' in query:
                 query_listbox.insert(tk.END,
-                                     f"{query['query']} - {query['location']} - {"(Will be sent)" if query['isChecked'] else "(Won't be sent)"}")
+                                     f"{query['query']} - {query['location']} - {'(Will be sent)' if query['isChecked'] else '(Won\'t be sent)'}")
 
     # Manage Queries Button
     def show_manage_window():
