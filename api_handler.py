@@ -1,7 +1,6 @@
 import requests
 import json
 import os
-from tkinter import messagebox
 
 api_keys = ["aba64a94a8msh1c14f7ec8390ddfp1e091cjsn940fd8e59a12",
             "81d662f1afmshd71bddf20a63757p13654ajsn8b46b22961d6",
@@ -35,7 +34,7 @@ counter = load_counter()
 def save_query_to_json(querystring):
     with open(json_file, 'w') as f:
         json.dump(querystring, f)
-    messagebox.showinfo("Success", "Query parameters saved to JSON file")
+    # messagebox.showinfo("Success", "Query parameters saved to JSON file")
 
 
 # Function to load querystring from JSON file
@@ -66,7 +65,7 @@ def send_request(querystring):
     global counter
 
     if not querystring:
-        messagebox.showerror("Error", "No query parameters found. Please set the parameters.")
+        # messagebox.showerror("Error", "No query parameters found. Please set the parameters.")
         return
 
     # Make the API request
