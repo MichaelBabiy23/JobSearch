@@ -1,11 +1,8 @@
-# import tkinter as tk
-# from tkinter import ttk, messagebox
 import json
 import os
 from api_handler import save_data_to_json, load_data_from_data_json, send_request
 from create_msg import create_job_msg
 from responses_funcs import remove_duplicates
-# from tkinter import ttk
 from json_file_funcs import load_data_from_data_json, load_query_from_json, save_query_to_json
 from api_handler import send_request, api_keys
 from email_handler import send_email, load_emails_from_file
