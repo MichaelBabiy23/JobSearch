@@ -1,11 +1,11 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+# import tkinter as tk
+# from tkinter import ttk, messagebox
 import json
 import os
 from api_handler import save_data_to_json, load_data_from_data_json, send_request
 from create_msg import create_job_msg
 from responses_funcs import remove_duplicates
-from tkinter import ttk
+# from tkinter import ttk
 from json_file_funcs import load_data_from_data_json, load_query_from_json, save_query_to_json
 from api_handler import send_request, api_keys
 from email_handler import send_email, load_emails_from_file
@@ -31,7 +31,7 @@ def save_queries(queries):
     with open(QUERY_FILE, 'w') as f:
         json.dump(queries, f)
 
-
+'''
 def create_ui(
         initial_query="",
         initial_location="Israel",
@@ -218,6 +218,7 @@ def create_ui(
 
     # Start the UI
     root.mainloop()
+'''
 
 
 # Send request and notify recipients based on selected queries
@@ -225,7 +226,7 @@ def request_and_notify():
     queries = load_queries()
     selected_queries = [query for query in queries if query.get("isChecked")]  # Collect only selected queries
     if not selected_queries:
-        messagebox.showwarning("Selection Error", "No queries selected.")
+        # messagebox.showwarning("Selection Error", "No queries selected.")
         return
 
     for query_data in selected_queries:

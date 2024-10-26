@@ -1,7 +1,7 @@
 import time
 import schedule
 from datetime import datetime
-from ui_handler import create_ui, request_and_notify
+from ui_handler import request_and_notify
 
 TIME_OF_SENDING = "08:00"
 
